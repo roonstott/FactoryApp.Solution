@@ -17,10 +17,10 @@ namespace Factory.Controllers;
     [HttpGet("/")]
     public ActionResult Index()
     {
-      // List<Engineer> engineers = _db.Engineers.ToList();
-      // List<Machine> machines = _db.Machines.ToList();
+      List<Engineer> engineers = _db.Engineers.ToList();
+      List<Machine> machines = _db.Machines.ToList();
+      List<object> model = new List<object>{engineers, machines};
       
-      // List<object> model = new List<object> {engineers, machines};
-      return View();
+      return View(model);
     }
   }

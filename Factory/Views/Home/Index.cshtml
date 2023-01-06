@@ -6,6 +6,23 @@
 
 <p>Something</p>
 
+@if (Model[0].Count == 0)
+{
+  <p>There are no engineers</p>
+}
+@if (Model[0].Count > 0)
+{
+  @foreach(Engineer engineer in Model[0])
+  {
+    <li>@engineer.Name</li>
+  }
+}
+
+@if (Model[1].Count == 0)
+{
+  <p>There are no machines</p>
+}
+
 
 
 @Html.ActionLink("Add An Engineer", "Create", "Engineers")
