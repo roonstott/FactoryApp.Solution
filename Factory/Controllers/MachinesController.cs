@@ -34,9 +34,10 @@ namespace Factory.Controllers;
       return RedirectToAction("Index");
     }
 
-    public ActionResult Details (int id)
+    public ActionResult Details (int id, bool showForm)
     {
       Machine thisMachine = _db.Machines.FirstOrDefault(m => m.MachineId == id);
+      ViewBag.ShowForm = showForm;
       return View(thisMachine); 
     }
 

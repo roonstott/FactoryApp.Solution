@@ -6,3 +6,34 @@
 @model Factory.Models.Engineer
 
 <h3>@Model.Name</h3>
+
+<h4>Authorized Machines</h4>
+
+@if (Model.JoinEntities.Count == 0)
+{
+  <p>Not Authorized To Work On Any Machines</p>
+}
+
+@if (Model.JoinEntities.Count > 0)
+{
+  @foreach(EngineerMachine join in Model.JoinEntities)
+  {
+    <P>@join.Machine.Name</P>
+  }
+}
+
+@if (@ViewBag.ShowForm == false) 
+{
+  @Html.ActionLink("Add A Machiine", "Details", new { id = Model.EngineerId, showForm = true})
+}
+
+@if (@ViewBag.ShowForm == true) 
+{
+  @using (Html.BeginForm())
+  {
+    @Html.HiddenFor(model => model.EngineerId)
+    @Html.Label("Select Machine")
+    @Html.DropDownList("MachineId")
+    <button type="submit" class="btn btn-success">Add Machine</button>
+  }
+}

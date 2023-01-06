@@ -35,10 +35,25 @@ namespace Factory.Controllers;
       return RedirectToAction("Index", "Home");
     }
 
-    public ActionResult Details (int id)
+    public ActionResult Details (int id, bool showForm)
     {
-      Engineer thisEngineer = _db.Engineers.FirstOrDefault(e => e.EngineerId == id);
+      Engineer thisEngineer = _db.Engineers
+                                          .Include(e => e.JoinEntities)
+                                          .ThenInclude(join => join.Machine)
+                                          .FirstOrDefault(e => e.EngineerId == id);
+      ViewBag.MachineId = new SelectList(_db.Machines, "MachineId", "Name");
+      ViewBag.ShowForm = showForm;
       return View(thisEngineer);
+    }
+
+    [HttpPost, ActionName("Details")]
+    public ActionResult AddMachine( int machineId, Engineer engineer)
+    {
+      EngineerMachine join = new EngineerMachine {EngineerId = engineer.EngineerId, MachineId = machineId};
+      _db.JoinEntities.Add(join); 
+      _db.SaveChanges();
+      return RedirectToAction("Details", new { id = engineer.EngineerId, showForm = false});
+
     }
   }
 
