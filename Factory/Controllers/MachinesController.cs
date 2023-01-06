@@ -31,15 +31,27 @@ namespace Factory.Controllers;
     {
       _db.Machines.Add(machine);
       _db.SaveChanges(); 
-      return RedirectToAction("Index");
+      return RedirectToAction("Index", "Home");
     }
 
     public ActionResult Details (int id, bool showForm)
     {
-      Machine thisMachine = _db.Machines.FirstOrDefault(m => m.MachineId == id);
+      Machine thisMachine = _db.Machines
+                                          .Include(m => m.JoinEntities)
+                                          .ThenInclude(join => join.Engineer)
+                                          .FirstOrDefault(m => m.MachineId == id);
+      ViewBag.EngineerId = new SelectList(_db.Engineers, "EngineerId", "Name");
       ViewBag.ShowForm = showForm;
-      return View(thisMachine); 
+      return View(thisMachine);
     }
 
+    [HttpPost, ActionName("Details")]
+    public ActionResult AddMachine( int engineerId, Machine machine)
+    {
+      EngineerMachine join = new EngineerMachine {EngineerId = engineerId, MachineId = machine.MachineId};
+      _db.JoinEntities.Add(join); 
+      _db.SaveChanges();
+      return RedirectToAction("Details", new { id = machine.MachineId, showForm = false});
+    }
   }
 

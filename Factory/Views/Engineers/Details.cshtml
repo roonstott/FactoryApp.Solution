@@ -18,13 +18,20 @@
 {
   @foreach(EngineerMachine join in Model.JoinEntities)
   {
-    <P>@join.Machine.Name</P>
+    <div class="row">
+      <div class="col-8">
+        <p>@join.Machine.Name</p>
+      </div>
+      <div class="col-4">
+        @Html.ActionLink("X", "Delete", new {joinId = join.EngineerMachineId, id = Model.EngineerId})
+      </div>
+    </div>    
   }
 }
 
 @if (@ViewBag.ShowForm == false) 
 {
-  @Html.ActionLink("Add A Machiine", "Details", new { id = Model.EngineerId, showForm = true})
+  <button class="btn btn-success">@Html.ActionLink("Add A Machiine", "Details", new { id = Model.EngineerId, showForm = true})</button>
 }
 
 @if (@ViewBag.ShowForm == true) 
