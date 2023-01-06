@@ -18,7 +18,19 @@
 {
   @foreach(EngineerMachine join in Model.JoinEntities)
   {
-    <P>@join.Engineer.Name</P>
+    <div class="row">
+      <div class="col-8">
+        <p>@join.Engineer.Name</p>
+      </div>
+      <div class="col-4">
+        @using(Html.BeginForm("DeleteJoin", "Machines"))
+        {
+          @Html.Hidden("joinId", join.EngineerMachineId)
+          @Html.Hidden("mId", Model.MachineId)            
+          <input type="submit" value="X">
+        }
+      </div>
+    </div>    
   }
 }
 

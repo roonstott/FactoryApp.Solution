@@ -23,7 +23,12 @@
         <p>@join.Machine.Name</p>
       </div>
       <div class="col-4">
-        @Html.ActionLink("X", "Delete", new {joinId = join.EngineerMachineId, id = Model.EngineerId})
+        @using(Html.BeginForm("DeleteJoin", "Engineers"))
+        {
+          @Html.Hidden("joinId", join.EngineerMachineId)
+          @Html.Hidden("eId", Model.EngineerId)            
+          <input type="submit" value="X">
+        }
       </div>
     </div>    
   }

@@ -53,5 +53,14 @@ namespace Factory.Controllers;
       _db.SaveChanges();
       return RedirectToAction("Details", new { id = machine.MachineId, showForm = false});
     }
+
+    [HttpPost]
+    public ActionResult DeleteJoin (int joinId, int mId)
+    {
+      EngineerMachine join = _db.JoinEntities.FirstOrDefault(j => j.EngineerMachineId == joinId);
+      _db.JoinEntities.Remove(join); 
+      _db.SaveChanges();
+      return RedirectToAction("Details", new {id = mId, showForm = false});
+    }
   }
 

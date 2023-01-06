@@ -55,12 +55,12 @@ namespace Factory.Controllers;
       return RedirectToAction("Details", new { id = engineer.EngineerId, showForm = false});
     }
     [HttpPost]
-    public ActionResult Delete (int joinId, int eId)
+    public ActionResult DeleteJoin (int joinId, int eId)
     {
-      EngineerMachine join = _db.FirstOrDefault(j => j.EngineerMachineId == joinId);
-      _db.Remove(join); 
+      EngineerMachine join = _db.JoinEntities.FirstOrDefault(j => j.EngineerMachineId == joinId);
+      _db.JoinEntities.Remove(join); 
       _db.SaveChanges();
-      return RedirectToAction("Details", new {id = eId, showForm = false})
+      return RedirectToAction("Details", new {id = eId, showForm = false});
     }
   }
 
