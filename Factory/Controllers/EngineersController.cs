@@ -33,6 +33,12 @@ namespace Factory.Controllers;
       _db.Engineers.Add(engineer);
       _db.SaveChanges(); 
       return RedirectToAction("Index", "Home");
-    }  
+    }
+
+    public ActionResult Details (int id)
+    {
+      Engineer thisEngineer = _db.Engineers.FirstOrDefault(e => e.EngineerId == id);
+      return View(thisEngineer);
+    }
   }
 

@@ -1,17 +1,26 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Engineers</title>
-    <link 
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" 
-      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" 
-      crossorigin="anonymous">
-    <link rel="stylesheet" href="~/css/styles.css">
-  </head>
-  <body>
-    <h1>Factory</h1>
+<head>
+  <meta charset="utf-8">
+  <title>Factory Manager</title>
+  <link 
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" 
+    integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" 
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="~/css/styles.css">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light" id="navbar">
+    <a class="navbar-brand">Dr. Sillystringz's Factory | </a>  
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <a class="nav-link enlarge" href='/'>Home</a>
+      <a class="nav-link enlarge" href='/Machines'>Machines</a> 
+      <a class="nav-link enlarge" href='/Engineers'>Engineers</a>
+    </div>
+  </nav>
+  <div class="container">
     @RenderBody()
-  </body>
+  </div>
+</body>
 </html>

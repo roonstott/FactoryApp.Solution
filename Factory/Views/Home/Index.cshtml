@@ -4,8 +4,6 @@
 
 @using Factory.Models
 
-<p>Something</p>
-
 @if (Model[0].Count == 0)
 {
   <p>There are no engineers</p>
@@ -23,6 +21,13 @@
   <p>There are no machines</p>
 }
 
+@if (Model[1].Count > 0)
+{
+  @foreach(Machine machine in Model[1])
+  {
+    <li>@machine.Name</li>
+  }
+}
 
-
-@Html.ActionLink("Add An Engineer", "Create", "Engineers")
+@Html.ActionLink("Add An Engineer", "Create", "Engineers")<br>
+@Html.ActionLink("Add A Machine", "Create", "Machines")
