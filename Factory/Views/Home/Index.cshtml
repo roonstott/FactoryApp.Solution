@@ -4,40 +4,48 @@
 
 @using Factory.Models
 
-<div class="row">
+<div class="row" id="splash-page">
   <div class="col-6">
-    <h2>Engineers</h2>
-    @if (Model[0].Count == 0)
-    {
-      <p>There are no engineers</p>
-    }
-    @if (Model[0].Count > 0)
-    {
-       @foreach(Engineer engineer in Model[0])
-      {
-        <div class="row">      
-          @Html.ActionLink(engineer.Name, "Details", "Engineers", new {id = engineer.EngineerId, showForm = false, showDelete = false})
-        </div>
-      }
-    }
-    <button class="btn btn-success">@Html.ActionLink("Add An Engineer", "Create", "Engineers")</button><br>
+    <div class="card">    
+      <h2 class="card-title">Engineers</h2>
+      <div class="card-body">
+        @if (Model[0].Count == 0)
+        {
+          <p>There are no engineers</p>
+        }
+        @if (Model[0].Count > 0)
+        {
+          @foreach(Engineer engineer in Model[0])
+          {
+            <div class="row" id="list">
+              @Html.ActionLink(engineer.Name, "Details", "Engineers", new {id = engineer.EngineerId, showForm = false, showDelete = false})
+            </div>
+          }
+        }
+        <button class="btn btn-light">@Html.ActionLink("Add An Engineer", "Create", "Engineers")</button><br>
+      </div>
+    </div>
   </div>
   <div class="col-6">
-    <h2>Machines</h2>
-    @if (Model[1].Count == 0)
-    {
-      <p>There are no machines</p>
-    }
-    @if (Model[1].Count > 0)
-    {
-      @foreach(Machine machine in Model[1])
-      { 
-        <div class="row">      
-          @Html.ActionLink(machine.Name, "Details", "Machines", new {id = machine.MachineId, showForm = false, showDelete = false})
-        </div>    
-      }
-    }
-    <button class="btn btn-success">@Html.ActionLink("Add A Machine", "Create", "Machines")</button><br>
+    <div class="card">    
+      <h2 class="card-title">Machines</h2>
+      <div class="card-body">
+        @if (Model[1].Count == 0)
+        {
+          <p>There are no machines</p>
+        }
+        @if (Model[1].Count > 0)
+        {
+          @foreach(Machine machine in Model[1])
+          { 
+            <div class="row" id="list">      
+              @Html.ActionLink(machine.Name, "Details", "Machines", new {id = machine.MachineId, showForm = false, showDelete = false})
+            </div>    
+          }
+        }
+        <button class="btn btn-light">@Html.ActionLink("Add A Machine", "Create", "Machines")</button><br>
+      </div>
+    </div>
   </div>
 </div>
 

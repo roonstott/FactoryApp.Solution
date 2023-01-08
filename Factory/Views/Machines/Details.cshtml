@@ -5,67 +5,70 @@
 @using Factory.Models
 @model Factory.Models.Machine
 
-<h3>@Model.Name</h3>
+<div class="card">    
+  <h2 class="card-title">@Model.Name</h2>
+  <div class="card-body">
+    <h3>Authorized Engineers</h3>
 
-<h4>Authorized Engineers</h4>
+    @if (Model.JoinEntities.Count == 0 && ViewBag.EngineerCount > 0)
+    {
+      <p>No Engineers Have Been Trained On This Machine</p>
+    }
 
-@if (Model.JoinEntities.Count == 0 && ViewBag.EngineerCount > 0)
-{
-  <p>No Engineers Have Been Trained On This Machine</p>
-}
+    @if (Model.JoinEntities.Count > 0)
+    {
+      @foreach(EngineerMachine join in Model.JoinEntities)
+      {
+        <div class="row" id="list">
+          <div class="col-8">
+            <p>@join.Engineer.Name</p>
+          </div>
+          <div class="col-4">
+            @using(Html.BeginForm("DeleteJoin", "Machines"))
+            {
+              @Html.Hidden("joinId", join.EngineerMachineId)
+              @Html.Hidden("mId", Model.MachineId)            
+              <input type="submit" value="X">
+            }
+          </div>
+        </div>    
+      }
+    }
 
-@if (Model.JoinEntities.Count > 0)
-{
-  @foreach(EngineerMachine join in Model.JoinEntities)
-  {
-    <div class="row">
-      <div class="col-8">
-        <p>@join.Engineer.Name</p>
-      </div>
-      <div class="col-4">
-        @using(Html.BeginForm("DeleteJoin", "Machines"))
-        {
-          @Html.Hidden("joinId", join.EngineerMachineId)
-          @Html.Hidden("mId", Model.MachineId)            
-          <input type="submit" value="X">
-        }
-      </div>
-    </div>    
-  }
-}
+    @if (@ViewBag.ShowForm == false && @ViewBag.ShowDelete == false) 
+    {
+      @if (ViewBag.EngineerCount == 0)
+      {
+        <p>No engineers have been added. You must create an engineer before you can associate an engineer with this machine.</p>
+      }
+      @if (ViewBag.EngineerCount > 0)
+      {
+        <button class="btn btn-light">@Html.ActionLink("Add An Engineer", "Details", new { id = Model.MachineId, showForm = true, showDelete = false})</button>
+      }  
+      <button id="remove" class="btn btn-danger">@Html.ActionLink($"Remove {@Model.Name}", "Details", new { id = Model.MachineId, showForm = false, showDelete = true})</button>
+    }
 
-@if (@ViewBag.ShowForm == false && @ViewBag.ShowDelete == false) 
-{
-  @if (ViewBag.EngineerCount == 0)
-  {
-    <p>No engineers have been added. You must create an engineer before you can associate an engineer with this machine.</p>
-  }
-  @if (ViewBag.EngineerCount > 0)
-  {
-    <button class="btn btn-success">@Html.ActionLink("Add An Engineer", "Details", new { id = Model.MachineId, showForm = true, showDelete = false})</button>
-  }  
-  <button class="btn btn-danger">@Html.ActionLink($"Remove {@Model.Name}", "Details", new { id = Model.MachineId, showForm = false, showDelete = true})</button>
-}
+    @if (@ViewBag.ShowForm == true) 
+    {
+      @using (Html.BeginForm())
+      {
+        @Html.HiddenFor(model => model.MachineId)
+        @Html.Label("Select Engineer")
+        @Html.DropDownList("EngineerId")
+        <button type="submit" class="btn btn-secondary">Add</button>    
+      }
+      @Html.ActionLink("Cancel", "Details", new {id = Model.MachineId, showForm = false, showDelete = false})
+    }
 
-@if (@ViewBag.ShowForm == true) 
-{
-  @using (Html.BeginForm())
-  {
-    @Html.HiddenFor(model => model.MachineId)
-    @Html.Label("Select Engineer")
-    @Html.DropDownList("EngineerId")
-    <button type="submit" class="btn btn-success">Add</button>    
-  }
-  @Html.ActionLink("Cancel", "Details", new {id = Model.MachineId, showForm = false, showDelete = false})
-}
-
-@if (@ViewBag.ShowDelete == true)
-{
-  @using (Html.BeginForm("Delete", "Machines"))
-  {
-    <p>Are you sure that you want to decomission @Model.Name?</p>
-    @Html.Hidden("id", Model.MachineId)
-    <button type="submit" class="btn btn-danger">Remove @Model.Name</button>
-  }
-  @Html.ActionLink($"Never mind, I don't want to get rid of {Model.Name}", "Details", new {id = Model.MachineId, showForm = false, showDelete = false})
-}
+    @if (@ViewBag.ShowDelete == true)
+    {
+      @using (Html.BeginForm("Delete", "Machines"))
+      {
+        <p>Are you sure that you want to decomission @Model.Name?</p>
+        @Html.Hidden("id", Model.MachineId)
+        <button id="remove" type="submit" class="btn btn-danger">Remove @Model.Name</button>
+      }
+      @Html.ActionLink($"Never mind, I don't want to get rid of {Model.Name}", "Details", new {id = Model.MachineId, showForm = false, showDelete = false})
+    }
+  </div>
+</div>
