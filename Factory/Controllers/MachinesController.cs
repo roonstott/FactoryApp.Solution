@@ -34,7 +34,7 @@ namespace Factory.Controllers;
       return RedirectToAction("Index", "Home");
     }
 
-    public ActionResult Details (int id, bool showForm)
+    public ActionResult Details (int id, bool showForm, bool showDelete)
     {
       Machine thisMachine = _db.Machines
                                           .Include(m => m.JoinEntities)
@@ -42,16 +42,23 @@ namespace Factory.Controllers;
                                           .FirstOrDefault(m => m.MachineId == id);
       ViewBag.EngineerId = new SelectList(_db.Engineers, "EngineerId", "Name");
       ViewBag.ShowForm = showForm;
+      ViewBag.ShowDelete = showDelete;
       return View(thisMachine);
     }
 
     [HttpPost, ActionName("Details")]
     public ActionResult AddMachine( int engineerId, Machine machine)
     {
-      EngineerMachine join = new EngineerMachine {EngineerId = engineerId, MachineId = machine.MachineId};
-      _db.JoinEntities.Add(join); 
-      _db.SaveChanges();
-      return RedirectToAction("Details", new { id = machine.MachineId, showForm = false});
+      #nullable enable
+      EngineerMachine ? check = _db.JoinEntities.FirstOrDefault(j => (j.EngineerId == engineerId && j.MachineId == machine.MachineId)); 
+      #nullable disable
+      if (check == null && engineerId !=0)
+      { 
+        EngineerMachine join = new EngineerMachine {EngineerId = engineerId, MachineId = machine.MachineId};
+        _db.JoinEntities.Add(join); 
+        _db.SaveChanges();
+      }
+      return RedirectToAction("Details", new { id = machine.MachineId, showForm = false, showDelete = false});
     }
 
     [HttpPost]
@@ -60,7 +67,16 @@ namespace Factory.Controllers;
       EngineerMachine join = _db.JoinEntities.FirstOrDefault(j => j.EngineerMachineId == joinId);
       _db.JoinEntities.Remove(join); 
       _db.SaveChanges();
-      return RedirectToAction("Details", new {id = mId, showForm = false});
+      return RedirectToAction("Details", new {id = mId, showForm = false, showDelete = false});
+    }
+
+    [HttpPost]
+    public ActionResult Delete(int id)
+    {
+      Machine thisMachine = _db.Machines.FirstOrDefault(m => m.MachineId == id);
+      _db.Machines.Remove(thisMachine); 
+      _db.SaveChanges();
+      return RedirectToAction("Index");
     }
   }
 

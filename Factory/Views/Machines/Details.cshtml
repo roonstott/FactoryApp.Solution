@@ -34,9 +34,10 @@
   }
 }
 
-@if (@ViewBag.ShowForm == false) 
+@if (@ViewBag.ShowForm == false && @ViewBag.ShowDelete == false) 
 {
-  <button class="btn btn-success">@Html.ActionLink("Add An Engineer", "Details", new { id = Model.MachineId, showForm = true})</button>
+  <button class="btn btn-success">@Html.ActionLink("Add An Engineer", "Details", new { id = Model.MachineId, showForm = true, showDelete = false})</button>
+  <button class="btn btn-danger">@Html.ActionLink($"Remove {@Model.Name}", "Details", new { id = Model.MachineId, showForm = false, showDelete = true})</button>
 }
 
 @if (@ViewBag.ShowForm == true) 
@@ -47,5 +48,15 @@
     @Html.Label("Select Engineer")
     @Html.DropDownList("EngineerId")
     <button type="submit" class="btn btn-success">Add</button>
+  }
+}
+
+@if (@ViewBag.ShowDelete == true)
+{
+  @using (Html.BeginForm("Delete", "Machines"))
+  {
+    <p>Are you sure that you want to remove @Model.Name</p>
+    @Html.Hidden("id", Model.MachineId)
+    <button type="submit" class="btn btn-danger">Remove @Model.Name</button>
   }
 }

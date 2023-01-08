@@ -35,7 +35,7 @@ namespace Factory.Controllers;
       return RedirectToAction("Index", "Home");
     }
 
-    public ActionResult Details (int id, bool showForm)
+    public ActionResult Details (int id, bool showForm, bool showDelete)
     {
       Engineer thisEngineer = _db.Engineers
                                           .Include(e => e.JoinEntities)
@@ -43,24 +43,43 @@ namespace Factory.Controllers;
                                           .FirstOrDefault(e => e.EngineerId == id);
       ViewBag.MachineId = new SelectList(_db.Machines, "MachineId", "Name");
       ViewBag.ShowForm = showForm;
+      ViewBag.ShowDelete = showDelete;
       return View(thisEngineer);
     }
 
     [HttpPost, ActionName("Details")]
     public ActionResult AddMachine( int machineId, Engineer engineer)
     {
-      EngineerMachine join = new EngineerMachine {EngineerId = engineer.EngineerId, MachineId = machineId};
-      _db.JoinEntities.Add(join); 
-      _db.SaveChanges();
-      return RedirectToAction("Details", new { id = engineer.EngineerId, showForm = false});
+      #nullable enable
+      EngineerMachine ? check = _db.JoinEntities.FirstOrDefault(j => (j.EngineerId == engineer.EngineerId && j.MachineId == machineId));
+      #nullable disable
+
+      if (check == null && machineId != 0)
+      {
+        EngineerMachine join = new EngineerMachine {EngineerId = engineer.EngineerId, MachineId = machineId};
+        _db.JoinEntities.Add(join); 
+        _db.SaveChanges();        
+      }
+
+      return RedirectToAction("Details", new { id = engineer.EngineerId, showForm = false, showDelete = false});
     }
+    
     [HttpPost]
     public ActionResult DeleteJoin (int joinId, int eId)
     {
       EngineerMachine join = _db.JoinEntities.FirstOrDefault(j => j.EngineerMachineId == joinId);
       _db.JoinEntities.Remove(join); 
       _db.SaveChanges();
-      return RedirectToAction("Details", new {id = eId, showForm = false});
+      return RedirectToAction("Details", new {id = eId, showForm = false, showDelete = false});
+    }
+
+    [HttpPost]
+    public ActionResult Delete(int id)
+    {
+      Engineer thisEngineer = _db.Engineers.FirstOrDefault(e => e.EngineerId == id);
+      _db.Engineers.Remove(thisEngineer); 
+      _db.SaveChanges();
+      return RedirectToAction("Index");
     }
   }
 
