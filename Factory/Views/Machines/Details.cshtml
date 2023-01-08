@@ -9,7 +9,7 @@
 
 <h4>Authorized Engineers</h4>
 
-@if (Model.JoinEntities.Count == 0)
+@if (Model.JoinEntities.Count == 0 && ViewBag.EngineerCount > 0)
 {
   <p>No Engineers Have Been Trained On This Machine</p>
 }
@@ -36,7 +36,14 @@
 
 @if (@ViewBag.ShowForm == false && @ViewBag.ShowDelete == false) 
 {
-  <button class="btn btn-success">@Html.ActionLink("Add An Engineer", "Details", new { id = Model.MachineId, showForm = true, showDelete = false})</button>
+  @if (ViewBag.EngineerCount == 0)
+  {
+    <p>No engineers have been added. You must create an engineer before you can associate an engineer with this machine.</p>
+  }
+  @if (ViewBag.EngineerCount > 0)
+  {
+    <button class="btn btn-success">@Html.ActionLink("Add An Engineer", "Details", new { id = Model.MachineId, showForm = true, showDelete = false})</button>
+  }  
   <button class="btn btn-danger">@Html.ActionLink($"Remove {@Model.Name}", "Details", new { id = Model.MachineId, showForm = false, showDelete = true})</button>
 }
 
@@ -47,16 +54,18 @@
     @Html.HiddenFor(model => model.MachineId)
     @Html.Label("Select Engineer")
     @Html.DropDownList("EngineerId")
-    <button type="submit" class="btn btn-success">Add</button>
+    <button type="submit" class="btn btn-success">Add</button>    
   }
+  @Html.ActionLink("Cancel", "Details", new {id = Model.MachineId, showForm = false, showDelete = false})
 }
 
 @if (@ViewBag.ShowDelete == true)
 {
   @using (Html.BeginForm("Delete", "Machines"))
   {
-    <p>Are you sure that you want to remove @Model.Name</p>
+    <p>Are you sure that you want to decomission @Model.Name?</p>
     @Html.Hidden("id", Model.MachineId)
     <button type="submit" class="btn btn-danger">Remove @Model.Name</button>
   }
+  @Html.ActionLink($"Never mind, I don't want to get rid of {Model.Name}", "Details", new {id = Model.MachineId, showForm = false, showDelete = false})
 }

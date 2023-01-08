@@ -30,9 +30,16 @@ namespace Factory.Controllers;
     [HttpPost]
     public ActionResult Create(Engineer engineer)
     {
+      if (!ModelState.IsValid)
+      {
+        return View();
+      }
+      else
+      {      
       _db.Engineers.Add(engineer);
       _db.SaveChanges(); 
-      return RedirectToAction("Index", "Home");
+      return RedirectToAction("Index", "Engineers");
+      }
     }
 
     public ActionResult Details (int id, bool showForm, bool showDelete)
@@ -44,6 +51,7 @@ namespace Factory.Controllers;
       ViewBag.MachineId = new SelectList(_db.Machines, "MachineId", "Name");
       ViewBag.ShowForm = showForm;
       ViewBag.ShowDelete = showDelete;
+      ViewBag.MachineCount = _db.Machines.ToList().Count;
       return View(thisEngineer);
     }
 
@@ -63,7 +71,7 @@ namespace Factory.Controllers;
 
       return RedirectToAction("Details", new { id = engineer.EngineerId, showForm = false, showDelete = false});
     }
-    
+
     [HttpPost]
     public ActionResult DeleteJoin (int joinId, int eId)
     {

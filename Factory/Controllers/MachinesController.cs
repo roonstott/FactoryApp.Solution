@@ -29,11 +29,17 @@ namespace Factory.Controllers;
     [HttpPost]
     public ActionResult Create(Machine machine)
     {
+      if (!ModelState.IsValid)
+      {
+        return View();
+      }
+      else 
+      {      
       _db.Machines.Add(machine);
       _db.SaveChanges(); 
       return RedirectToAction("Index", "Home");
+      }
     }
-
     public ActionResult Details (int id, bool showForm, bool showDelete)
     {
       Machine thisMachine = _db.Machines
@@ -43,6 +49,7 @@ namespace Factory.Controllers;
       ViewBag.EngineerId = new SelectList(_db.Engineers, "EngineerId", "Name");
       ViewBag.ShowForm = showForm;
       ViewBag.ShowDelete = showDelete;
+      ViewBag.EngineerCount = _db.Engineers.ToList().Count;
       return View(thisMachine);
     }
 

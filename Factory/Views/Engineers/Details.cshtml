@@ -7,15 +7,15 @@
 
 <h3>@Model.Name</h3>
 
-<h4>Authorized Machines</h4>
-
-@if (Model.JoinEntities.Count == 0)
+@if (Model.JoinEntities.Count == 0 && ViewBag.MachineCount > 0)
 {
   <p>Not Authorized To Work On Any Machines</p>
 }
 
 @if (Model.JoinEntities.Count > 0)
 {
+  <h4>Authorized Machines</h4>
+
   @foreach(EngineerMachine join in Model.JoinEntities)
   {
     <div class="row">
@@ -36,7 +36,14 @@
 
 @if (@ViewBag.ShowForm == false && ViewBag.ShowDelete == false) 
 {
-  <button class="btn btn-success">@Html.ActionLink("Add A Machiine", "Details", new { id = Model.EngineerId, showForm = true, showDelete = false})</button>
+  @if (ViewBag.MachineCount == 0)
+  {
+    <p>No machines have been added. You must add a machine before you can assign a machine to @Model.Name.</p>
+  }
+  @if (ViewBag.MachineCount > 0)
+  {
+    <button class="btn btn-success">@Html.ActionLink("Add A Machiine", "Details", new { id = Model.EngineerId, showForm = true, showDelete = false})</button>
+  }  
   <button class="btn btn-danger">@Html.ActionLink($"Remove {@Model.Name}", "Details", new { id = Model.EngineerId, showForm = false, showDelete = true})</button>
 }
 
@@ -47,16 +54,18 @@
     @Html.HiddenFor(model => model.EngineerId)
     @Html.Label("Select Machine")
     @Html.DropDownList("MachineId")
-    <button type="submit" class="btn btn-success">Add Machine</button>
+    <button type="submit" class="btn btn-success">Add Machine</button>    
   }
+  @Html.ActionLink("Cancel", "Details", new {id = Model.EngineerId, showForm = false, showDelete = false})
 }
 
 @if (@ViewBag.ShowDelete == true)
 {
   @using (Html.BeginForm("Delete", "Engineers"))
   {
-    <p>Are you sure that you want to remove @Model.Name</p>
+    <p>Are you sure that you want to fire @Model.Name?</p>
     @Html.Hidden("id", Model.EngineerId)
-    <button type="submit" class="btn btn-danger">Remove @Model.Name</button>
+    <button type="submit" class="btn btn-danger">Remove @Model.Name</button>    
   }
+  @Html.ActionLink($"Never mind, I don't want to fire {Model.Name}", "Details", new {id = Model.EngineerId, showForm = false, showDelete = false})
 }
