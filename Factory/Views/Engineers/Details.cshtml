@@ -45,6 +45,12 @@
       {
         <button class="btn btn-light">@Html.ActionLink("Add A Machiine", "Details", new { id = Model.EngineerId, showForm = true, showDelete = false})</button>
       }  
+      <br>
+      <br>
+      @Html.ActionLink($"Edit {Model.Name}'s Profile", "Edit", new {id = Model.EngineerId})
+      <br>
+      <br>
+
       <button id="remove" class="btn btn-danger">@Html.ActionLink($"Remove {@Model.Name}", "Details", new { id = Model.EngineerId, showForm = false, showDelete = true})</button>
     }
 
