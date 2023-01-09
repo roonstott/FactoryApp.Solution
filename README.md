@@ -44,10 +44,9 @@ _This is a C# web app built with the ASP.NET Core MVC web development framework.
   
   
   
-* _Entity Framework Core has tools to automatically build the database schema utiliaing object mapping. To build the database, open a terminal, go to the `Factory` directory: `$ cd Factory` and enter the following two commands:_
+* _Entity Framework Core has tools to automatically build the database schema utiliaing object mapping. To build the database, open a terminal, go to the `Factory` directory: `$ cd Factory` and enter the following commands_
 
 ```
-    $ dotnet ef migrations add Initial
     $ dotnet ef database update   
 ```
 
